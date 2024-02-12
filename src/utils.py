@@ -13,6 +13,7 @@ import typing
 import weakref
 
 from . import fitz
+
 try:
     from . import mupdf
 except Exception:
@@ -49,7 +50,7 @@ def write_text(
         keep_proportion=True,
         rotate=0,
         oc=0,
-        ) -> None:
+) -> None:
     """Write the text of one or more fitz.TextWriter objects.
 
     Args:
@@ -101,7 +102,7 @@ def show_pdf_page(
         oc=0,
         rotate=0,
         clip=None,
-        ) -> int:
+) -> int:
     """Show page number 'pno' of PDF 'src' in rectangle 'rect'.
 
     Args:
@@ -116,6 +117,7 @@ def show_pdf_page(
     Returns:
         xref of inserted object (for reuse)
     """
+
     def calc_matrix(sr, tr, keep=True, rotate=0):
         """Calculate transformation matrix from source to target rect.
 
@@ -277,7 +279,7 @@ def insert_image(
         stream=None,
         width=0,
         xref=0,
-        ):
+):
     """Insert an image for display in a rectangle.
 
     Args:
@@ -391,12 +393,12 @@ def search_for(
         clip=None,
         quads=False,
         flags=fitz.TEXT_DEHYPHENATE
-            | fitz.TEXT_PRESERVE_WHITESPACE
-            | fitz.TEXT_PRESERVE_LIGATURES
-            | fitz.TEXT_MEDIABOX_CLIP
-            ,
+              | fitz.TEXT_PRESERVE_WHITESPACE
+              | fitz.TEXT_PRESERVE_LIGATURES
+              | fitz.TEXT_MEDIABOX_CLIP
+        ,
         textpage=None,
-        ) -> list:
+) -> list:
     """Search for a string on a page.
 
     Args:
@@ -424,17 +426,17 @@ def search_for(
 
 
 def search_page_for(
-    doc: fitz.Document,
-    pno: int,
-    text: str,
-    quads: bool = False,
-    clip: rect_like = None,
-    flags: int = fitz.TEXT_DEHYPHENATE
-            | fitz.TEXT_PRESERVE_LIGATURES
-            | fitz.TEXT_PRESERVE_WHITESPACE
-            | fitz.TEXT_MEDIABOX_CLIP
-            ,
-    textpage: fitz.TextPage = None,
+        doc: fitz.Document,
+        pno: int,
+        text: str,
+        quads: bool = False,
+        clip: rect_like = None,
+        flags: int = fitz.TEXT_DEHYPHENATE
+                     | fitz.TEXT_PRESERVE_LIGATURES
+                     | fitz.TEXT_PRESERVE_WHITESPACE
+                     | fitz.TEXT_MEDIABOX_CLIP
+        ,
+        textpage: fitz.TextPage = None,
 ) -> list:
     """Search for a string on a page.
 
@@ -459,11 +461,11 @@ def search_page_for(
 
 
 def get_text_blocks(
-    page: fitz.Page,
-    clip: rect_like = None,
-    flags: OptInt = None,
-    textpage: fitz.TextPage = None,
-    sort: bool = False,
+        page: fitz.Page,
+        clip: rect_like = None,
+        flags: OptInt = None,
+        textpage: fitz.TextPage = None,
+        sort: bool = False,
 ) -> list:
     """Return the text blocks on a page.
 
@@ -479,10 +481,10 @@ def get_text_blocks(
     if flags is None:
         flags = (
                 fitz.TEXT_PRESERVE_WHITESPACE
-                    | fitz.TEXT_PRESERVE_IMAGES
-                    | fitz.TEXT_PRESERVE_LIGATURES
-                    | fitz.TEXT_MEDIABOX_CLIP
-                )
+                | fitz.TEXT_PRESERVE_IMAGES
+                | fitz.TEXT_PRESERVE_LIGATURES
+                | fitz.TEXT_MEDIABOX_CLIP
+        )
     tp = textpage
     if tp is None:
         tp = page.get_textpage(clip=clip, flags=flags)
@@ -498,12 +500,12 @@ def get_text_blocks(
 
 
 def get_text_words(
-    page: fitz.Page,
-    clip: rect_like = None,
-    flags: OptInt = None,
-    textpage: fitz.TextPage = None,
-    sort: bool = False,
-    delimiters=None,
+        page: fitz.Page,
+        clip: rect_like = None,
+        flags: OptInt = None,
+        textpage: fitz.TextPage = None,
+        sort: bool = False,
+        delimiters=None,
 ) -> list:
     """Return the text words as a list with the bbox for each word.
 
@@ -533,9 +535,9 @@ def get_text_words(
 
 
 def get_textbox(
-    page: fitz.Page,
-    rect: rect_like,
-    textpage: fitz.TextPage = None,
+        page: fitz.Page,
+        rect: rect_like,
+        textpage: fitz.TextPage = None,
 ) -> str:
     tp = textpage
     if tp is None:
@@ -549,11 +551,11 @@ def get_textbox(
 
 
 def get_text_selection(
-    page: fitz.Page,
-    p1: point_like,
-    p2: point_like,
-    clip: rect_like = None,
-    textpage: fitz.TextPage = None,
+        page: fitz.Page,
+        p1: point_like,
+        p2: point_like,
+        clip: rect_like = None,
+        textpage: fitz.TextPage = None,
 ):
     fitz.CheckParent(page)
     tp = textpage
@@ -568,12 +570,12 @@ def get_text_selection(
 
 
 def get_textpage_ocr(
-    page: fitz.Page,
-    flags: int = 0,
-    language: str = "eng",
-    dpi: int = 72,
-    full: bool = False,
-    tessdata: str = None,
+        page: fitz.Page,
+        flags: int = 0,
+        language: str = "eng",
+        dpi: int = 72,
+        full: bool = False,
+        tessdata: str = None,
 ) -> fitz.TextPage:
     """Create a Textpage from combined results of normal and OCR text parsing.
 
@@ -592,13 +594,13 @@ def get_textpage_ocr(
         mat = fitz.Matrix(zoom, zoom)
         pix = page.get_pixmap(matrix=mat)
         ocr_pdf = fitz.Document(
-                "pdf",
-                pix.pdfocr_tobytes(
-                    compress=False,
-                    language=language,
-                    tessdata=tessdata,
-                    ),
-                )
+            "pdf",
+            pix.pdfocr_tobytes(
+                compress=False,
+                language=language,
+                tessdata=tessdata,
+            ),
+        )
         ocr_page = ocr_pdf.load_page(0)
         unzoom = page.rect.width / ocr_page.rect.width
         ctm = fitz.Matrix(unzoom, unzoom) * page.derotation_matrix
@@ -632,9 +634,9 @@ def get_textpage_ocr(
             if pix.alpha:  # must remove alpha channel
                 pix = fitz.Pixmap(pix, 0)
             imgdoc = fitz.Document(
-                    "pdf",
-                    pix.pdfocr_tobytes(language=language, tessdata=tessdata),
-                    )  # pdf with OCRed page
+                "pdf",
+                pix.pdfocr_tobytes(language=language, tessdata=tessdata),
+            )  # pdf with OCRed page
             imgpage = imgdoc.load_page(0)  # read image as a page
             pix = None
             # compute matrix to transform coordinates back to that of 'page'
@@ -735,7 +737,7 @@ def get_text(
         textpage: fitz.TextPage = None,
         sort: bool = False,
         delimiters=None,
-        ):
+):
     """Extract text from a page or an annotation.
 
     This is a unifying wrapper for various methods of the fitz.TextPage class.
@@ -795,12 +797,12 @@ def get_text(
         cb = page.cropbox
     # fitz.TextPage with or without images
     tp = textpage
-    #fitz.exception_info()
+    # fitz.exception_info()
     if tp is None:
         tp = page.get_textpage(clip=clip, flags=flags)
     elif getattr(tp, "parent") != page:
         raise ValueError("not a textpage of this page")
-    #fitz.log( '{option=}')
+    # fitz.log( '{option=}')
     if option == "json":
         t = tp.extractJSON(cb=cb, sort=sort)
     elif option == "rawjson":
@@ -824,13 +826,13 @@ def get_text(
 
 
 def get_page_text(
-    doc: fitz.Document,
-    pno: int,
-    option: str = "text",
-    clip: rect_like = None,
-    flags: OptInt = None,
-    textpage: fitz.TextPage = None,
-    sort: bool = False,
+        doc: fitz.Document,
+        pno: int,
+        option: str = "text",
+        clip: rect_like = None,
+        flags: OptInt = None,
+        textpage: fitz.TextPage = None,
+        sort: bool = False,
 ) -> typing.Any:
     """Extract a document page's text by page number.
 
@@ -844,16 +846,17 @@ def get_page_text(
     """
     return doc[pno].get_text(option, clip=clip, flags=flags, sort=sort)
 
+
 def get_pixmap(
         page: fitz.Page,
         *,
-        matrix: matrix_like=fitz.Identity,
+        matrix: matrix_like = fitz.Identity,
         dpi=None,
-        colorspace: fitz.Colorspace=fitz.csRGB,
-        clip: rect_like=None,
-        alpha: bool=False,
-        annots: bool=True,
-        ) -> fitz.Pixmap:
+        colorspace: fitz.Colorspace = fitz.csRGB,
+        clip: rect_like = None,
+        alpha: bool = False,
+        annots: bool = True,
+) -> fitz.Pixmap:
     """Create pixmap of page.
 
     Keyword args:
@@ -887,15 +890,15 @@ def get_pixmap(
 
 
 def get_page_pixmap(
-    doc: fitz.Document,
-    pno: int,
-    *,
-    matrix: matrix_like = fitz.Identity,
-    dpi=None,
-    colorspace: fitz.Colorspace = fitz.csRGB,
-    clip: rect_like = None,
-    alpha: bool = False,
-    annots: bool = True,
+        doc: fitz.Document,
+        pno: int,
+        *,
+        matrix: matrix_like = fitz.Identity,
+        dpi=None,
+        colorspace: fitz.Colorspace = fitz.csRGB,
+        clip: rect_like = None,
+        alpha: bool = False,
+        annots: bool = True,
 ) -> fitz.Pixmap:
     """Create pixmap of document page by page number.
 
@@ -910,12 +913,12 @@ def get_page_pixmap(
         annots: (bool) also render annotations
     """
     return doc[pno].get_pixmap(
-            matrix=matrix,
-            dpi=dpi, colorspace=colorspace,
-            clip=clip,
-            alpha=alpha,
-            annots=annots
-            )
+        matrix=matrix,
+        dpi=dpi, colorspace=colorspace,
+        clip=clip,
+        alpha=alpha,
+        annots=annots
+    )
 
 
 def getLinkDict(ln, document=None) -> dict:
@@ -993,10 +996,10 @@ def get_links(page: fitz.Page) -> list:
     if links != [] and page.parent.is_pdf:
         from . import extra
         linkxrefs = [x for x in
-                #page.annot_xrefs()
-                extra.JM_get_annot_xref_list2(page)
-                if x[1] == fitz.PDF_ANNOT_LINK
-                ]
+                     # page.annot_xrefs()
+                     extra.JM_get_annot_xref_list2(page)
+                     if x[1] == fitz.PDF_ANNOT_LINK
+                     ]
         if len(linkxrefs) == len(links):
             for i in range(len(linkxrefs)):
                 links[i]["xref"] = linkxrefs[i][0]
@@ -1005,14 +1008,15 @@ def get_links(page: fitz.Page) -> list:
 
 
 def get_toc(
-    doc: fitz.Document,
-    simple: bool = True,
+        doc: fitz.Document,
+        simple: bool = True,
 ) -> list:
     """Create a table of contents.
 
     Args:
         simple: a bool to control output. Returns a list, where each entry consists of outline level, title, page number and link destination (if simple = False). For details see PyMuPDF's documentation.
     """
+
     def recurse(olItem, liste, lvl):
         """Recursively follow the outline item chain and record item information in a list."""
         while olItem and olItem.this.m_internal:
@@ -1060,8 +1064,8 @@ def get_toc(
 
 
 def del_toc_item(
-    doc: fitz.Document,
-    idx: int,
+        doc: fitz.Document,
+        idx: int,
 ) -> None:
     """Delete TOC / bookmark item by index."""
     xref = doc.get_outline_xrefs()[idx]
@@ -1069,16 +1073,16 @@ def del_toc_item(
 
 
 def set_toc_item(
-    doc: fitz.Document,
-    idx: int,
-    dest_dict: OptDict = None,
-    kind: OptInt = None,
-    pno: OptInt = None,
-    uri: OptStr = None,
-    title: OptStr = None,
-    to: point_like = None,
-    filename: OptStr = None,
-    zoom: float = 0,
+        doc: fitz.Document,
+        idx: int,
+        dest_dict: OptDict = None,
+        kind: OptInt = None,
+        pno: OptInt = None,
+        uri: OptStr = None,
+        title: OptStr = None,
+        to: point_like = None,
+        filename: OptStr = None,
+        zoom: float = 0,
 ) -> None:
     """Update TOC item by index.
 
@@ -1213,7 +1217,7 @@ def set_metadata(doc: fitz.Document, m: dict) -> None:
         info_xref = 0
     else:
         info_xref = int(temp.replace("0 R", ""))
-    
+
     if m == {} and info_xref == 0:  # nothing to do
         return
 
@@ -1295,9 +1299,9 @@ def getDestStr(xref: int, ddict: dict) -> str:
 
 
 def set_toc(
-    doc: fitz.Document,
-    toc: list,
-    collapse: int = 1,
+        doc: fitz.Document,
+        toc: list,
+        collapse: int = 1,
 ) -> int:
     """Create new outline tree (table of contents, TOC).
 
@@ -1403,7 +1407,7 @@ def set_toc(
         parent = olitems[lvltab[lvl - 1]]  # the parent entry
 
         if (
-            dest_dict.get("collapse") or collapse and lvl > collapse
+                dest_dict.get("collapse") or collapse and lvl > collapse
         ):  # suppress expansion
             parent["count"] -= 1  # make /Count negative
         else:
@@ -1487,18 +1491,19 @@ def set_toc(
 
 
 def do_links(
-    doc1: fitz.Document,
-    doc2: fitz.Document,
-    from_page: int = -1,
-    to_page: int = -1,
-    start_at: int = -1,
+        doc1: fitz.Document,
+        doc2: fitz.Document,
+        from_page: int = -1,
+        to_page: int = -1,
+        start_at: int = -1,
 ) -> None:
     """Insert links contained in copied page range into destination PDF.
 
     Parameter values **must** equal those of method insert_pdf(), which must
     have been previously executed.
     """
-    #fitz.log( 'utils.do_links()')
+
+    # fitz.log( 'utils.do_links()')
     # --------------------------------------------------------------------------
     # internal function to create the actual "/Annots" object string
     # --------------------------------------------------------------------------
@@ -1588,10 +1593,10 @@ def do_links(
     for i in range(len(xref_src)):
         page_src = doc2[pno_src[i]]  # load source page
         links = page_src.get_links()  # get all its links
-        #fitz.log( '{pno_src=}')
-        #fitz.log( '{type(page_src)=}')
-        #fitz.log( '{page_src=}')
-        #fitz.log( '{=i len(links)}')
+        # fitz.log( '{pno_src=}')
+        # fitz.log( '{type(page_src)=}')
+        # fitz.log( '{page_src=}')
+        # fitz.log( '{=i len(links)}')
         if len(links) == 0:  # no links there
             page_src = None
             continue
@@ -1605,8 +1610,8 @@ def do_links(
             if annot_text:
                 link_tab.append(annot_text)
         if link_tab != []:
-            page_dst._addAnnot_FromString( tuple(link_tab))
-    #fitz.log( 'utils.do_links() returning.')
+            page_dst._addAnnot_FromString(tuple(link_tab))
+    # fitz.log( 'utils.do_links() returning.')
     return
 
 
@@ -1618,6 +1623,9 @@ def getLinkText(page: fitz.Page, lnk: dict) -> str:
     ictm = ~ctm
     r = lnk["from"]
     rect = "%g %g %g %g" % tuple(r * ictm)
+    NW = 'false'  # added WWC - new window is false by default
+    if 'NewWindow' in lnk:  # added WC
+        if lnk['NewWindow']: NW = 'true'  # added WC
 
     annot = ""
     if lnk["kind"] == fitz.LINK_GOTO:
@@ -1634,19 +1642,33 @@ def getLinkText(page: fitz.Page, lnk: dict) -> str:
 
     elif lnk["kind"] == fitz.LINK_GOTOR:
         if lnk["page"] >= 0:
-            txt = fitz.annot_skel["gotor1"]  # annot_gotor
-            pnt = lnk.get("to", fitz.Point(0, 0))  # destination point
-            if type(pnt) is not fitz.Point:
-                pnt = fitz.Point(0, 0)
-            annot = txt % (
-                lnk["page"],
-                pnt.x,
-                pnt.y,
-                lnk.get("zoom", 0),
-                lnk["file"],
-                lnk["file"],
-                rect,
-            )
+            zm = 0
+            if lnk.get('zoom', 0) == 'Fit':
+                txt = fitz.annot_skel["gotor4"]  # annot_gotor #changed from gotor1 by WWC to allow Fit
+                zm = 'Fit'
+                annot = txt % (
+                    NW,  # added by WWC
+                    lnk["page"],
+                    zm,
+                    lnk["file"],
+                    lnk["file"],
+                    rect,
+                )
+            else:
+                pnt = lnk.get("to", fitz.Point(0, 0))  # destination point
+                if type(pnt) is not fitz.Point:
+                    pnt = fitz.Point(0, 0)
+                txt = fitz.annot_skel["gotor3"]  # annot_gotor #changed from gotor1 by WWC to allow New Window
+                annot = txt % (
+                    NW,  # added by WWC
+                    lnk["page"],
+                    pnt.x,
+                    pnt.y,
+                    zm,
+                    lnk["file"],
+                    lnk["file"],
+                    rect,
+                )
         else:
             txt = fitz.annot_skel["gotor2"]  # annot_gotor_n
             annot = txt % (fitz.get_pdf_str(lnk["to"]), lnk["file"], rect)
@@ -1728,27 +1750,27 @@ def insert_link(page: fitz.Page, lnk: dict, mark: bool = True) -> None:
 
 
 def insert_textbox(
-    page: fitz.Page,
-    rect: rect_like,
-    buffer: typing.Union[str, list],
-    fontname: str = "helv",
-    fontfile: OptStr = None,
-    set_simple: int = 0,
-    encoding: int = 0,
-    fontsize: float = 11,
-    lineheight: OptFloat = None,
-    color: OptSeq = None,
-    fill: OptSeq = None,
-    expandtabs: int = 1,
-    align: int = 0,
-    rotate: int = 0,
-    render_mode: int = 0,
-    border_width: float = 0.05,
-    morph: OptSeq = None,
-    overlay: bool = True,
-    stroke_opacity: float = 1,
-    fill_opacity: float = 1,
-    oc: int = 0,
+        page: fitz.Page,
+        rect: rect_like,
+        buffer: typing.Union[str, list],
+        fontname: str = "helv",
+        fontfile: OptStr = None,
+        set_simple: int = 0,
+        encoding: int = 0,
+        fontsize: float = 11,
+        lineheight: OptFloat = None,
+        color: OptSeq = None,
+        fill: OptSeq = None,
+        expandtabs: int = 1,
+        align: int = 0,
+        rotate: int = 0,
+        render_mode: int = 0,
+        border_width: float = 0.05,
+        morph: OptSeq = None,
+        overlay: bool = True,
+        stroke_opacity: float = 1,
+        fill_opacity: float = 1,
+        oc: int = 0,
 ) -> float:
     """Insert text into a given rectangle.
 
@@ -1798,27 +1820,26 @@ def insert_textbox(
 
 
 def insert_text(
-    page: fitz.Page,
-    point: point_like,
-    text: typing.Union[str, list],
-    fontsize: float = 11,
-    lineheight: OptFloat = None,
-    fontname: str = "helv",
-    fontfile: OptStr = None,
-    set_simple: int = 0,
-    encoding: int = 0,
-    color: OptSeq = None,
-    fill: OptSeq = None,
-    border_width: float = 0.05,
-    render_mode: int = 0,
-    rotate: int = 0,
-    morph: OptSeq = None,
-    overlay: bool = True,
-    stroke_opacity: float = 1,
-    fill_opacity: float = 1,
-    oc: int = 0,
+        page: fitz.Page,
+        point: point_like,
+        text: typing.Union[str, list],
+        fontsize: float = 11,
+        lineheight: OptFloat = None,
+        fontname: str = "helv",
+        fontfile: OptStr = None,
+        set_simple: int = 0,
+        encoding: int = 0,
+        color: OptSeq = None,
+        fill: OptSeq = None,
+        border_width: float = 0.05,
+        render_mode: int = 0,
+        rotate: int = 0,
+        morph: OptSeq = None,
+        overlay: bool = True,
+        stroke_opacity: float = 1,
+        fill_opacity: float = 1,
+        oc: int = 0,
 ):
-
     img = page.new_shape()
     rc = img.insert_text(
         point,
@@ -1845,17 +1866,17 @@ def insert_text(
 
 
 def insert_htmlbox(
-    page,
-    rect,
-    text,
-    *,
-    css=None,
-    scale_low=0,
-    archive=None,
-    rotate=0,
-    oc=0,
-    opacity=1,
-    overlay=True,
+        page,
+        rect,
+        text,
+        *,
+        css=None,
+        scale_low=0,
+        archive=None,
+        rotate=0,
+        oc=0,
+        opacity=1,
+        overlay=True,
 ) -> float:
     """Insert text with optional HTML tags and stylings into a rectangle.
 
@@ -1960,9 +1981,9 @@ def insert_htmlbox(
     # - rotate
     # - move (0,0) to center of target rect
     mat = (
-        fitz.Matrix(scale, 0, 0, scale, -mp1.x, -mp1.y)
-        * fitz.Matrix(-rotate)
-        * fitz.Matrix(1, 0, 0, 1, mp2.x, mp2.y)
+            fitz.Matrix(scale, 0, 0, scale, -mp1.x, -mp1.y)
+            * fitz.Matrix(-rotate)
+            * fitz.Matrix(1, 0, 0, 1, mp2.x, mp2.y)
     )
 
     # copy over links
@@ -1974,10 +1995,10 @@ def insert_htmlbox(
 
 
 def new_page(
-    doc: fitz.Document,
-    pno: int = -1,
-    width: float = 595,
-    height: float = 842,
+        doc: fitz.Document,
+        pno: int = -1,
+        width: float = 595,
+        height: float = 842,
 ) -> fitz.Page:
     """Create and return a new page object.
 
@@ -1993,15 +2014,15 @@ def new_page(
 
 
 def insert_page(
-    doc: fitz.Document,
-    pno: int,
-    text: typing.Union[str, list, None] = None,
-    fontsize: float = 11,
-    width: float = 595,
-    height: float = 842,
-    fontname: str = "helv",
-    fontfile: OptStr = None,
-    color: OptSeq = (0,),
+        doc: fitz.Document,
+        pno: int,
+        text: typing.Union[str, list, None] = None,
+        fontsize: float = 11,
+        width: float = 595,
+        height: float = 842,
+        fontname: str = "helv",
+        fontfile: OptStr = None,
+        color: OptSeq = (0,),
 ) -> int:
     """Create a new PDF page and insert some text.
 
@@ -2024,19 +2045,19 @@ def insert_page(
 
 
 def draw_line(
-    page: fitz.Page,
-    p1: point_like,
-    p2: point_like,
-    color: OptSeq = (0,),
-    dashes: OptStr = None,
-    width: float = 1,
-    lineCap: int = 0,
-    lineJoin: int = 0,
-    overlay: bool = True,
-    morph: OptSeq = None,
-    stroke_opacity: float = 1,
-    fill_opacity: float = 1,
-    oc=0,
+        page: fitz.Page,
+        p1: point_like,
+        p2: point_like,
+        color: OptSeq = (0,),
+        dashes: OptStr = None,
+        width: float = 1,
+        lineCap: int = 0,
+        lineJoin: int = 0,
+        overlay: bool = True,
+        morph: OptSeq = None,
+        stroke_opacity: float = 1,
+        fill_opacity: float = 1,
+        oc=0,
 ) -> fitz.Point:
     """Draw a line from point p1 to point p2."""
     img = page.new_shape()
@@ -2059,20 +2080,20 @@ def draw_line(
 
 
 def draw_squiggle(
-    page: fitz.Page,
-    p1: point_like,
-    p2: point_like,
-    breadth: float = 2,
-    color: OptSeq = (0,),
-    dashes: OptStr = None,
-    width: float = 1,
-    lineCap: int = 0,
-    lineJoin: int = 0,
-    overlay: bool = True,
-    morph: OptSeq = None,
-    stroke_opacity: float = 1,
-    fill_opacity: float = 1,
-    oc: int = 0,
+        page: fitz.Page,
+        p1: point_like,
+        p2: point_like,
+        breadth: float = 2,
+        color: OptSeq = (0,),
+        dashes: OptStr = None,
+        width: float = 1,
+        lineCap: int = 0,
+        lineJoin: int = 0,
+        overlay: bool = True,
+        morph: OptSeq = None,
+        stroke_opacity: float = 1,
+        fill_opacity: float = 1,
+        oc: int = 0,
 ) -> fitz.Point:
     """Draw a squiggly line from point p1 to point p2."""
     img = page.new_shape()
@@ -2095,20 +2116,20 @@ def draw_squiggle(
 
 
 def draw_zigzag(
-    page: fitz.Page,
-    p1: point_like,
-    p2: point_like,
-    breadth: float = 2,
-    color: OptSeq = (0,),
-    dashes: OptStr = None,
-    width: float = 1,
-    lineCap: int = 0,
-    lineJoin: int = 0,
-    overlay: bool = True,
-    morph: OptSeq = None,
-    stroke_opacity: float = 1,
-    fill_opacity: float = 1,
-    oc: int = 0,
+        page: fitz.Page,
+        p1: point_like,
+        p2: point_like,
+        breadth: float = 2,
+        color: OptSeq = (0,),
+        dashes: OptStr = None,
+        width: float = 1,
+        lineCap: int = 0,
+        lineJoin: int = 0,
+        overlay: bool = True,
+        morph: OptSeq = None,
+        stroke_opacity: float = 1,
+        fill_opacity: float = 1,
+        oc: int = 0,
 ) -> fitz.Point:
     """Draw a zigzag line from point p1 to point p2."""
     img = page.new_shape()
@@ -2145,7 +2166,7 @@ def draw_rect(
         fill_opacity: float = 1,
         oc: int = 0,
         radius=None,
-        ) -> fitz.Point:
+) -> fitz.Point:
     '''
     Draw a rectangle. See Shape class method for details.
     '''
@@ -2169,19 +2190,19 @@ def draw_rect(
 
 
 def draw_quad(
-    page: fitz.Page,
-    quad: quad_like,
-    color: OptSeq = (0,),
-    fill: OptSeq = None,
-    dashes: OptStr = None,
-    width: float = 1,
-    lineCap: int = 0,
-    lineJoin: int = 0,
-    morph: OptSeq = None,
-    overlay: bool = True,
-    stroke_opacity: float = 1,
-    fill_opacity: float = 1,
-    oc: int = 0,
+        page: fitz.Page,
+        quad: quad_like,
+        color: OptSeq = (0,),
+        fill: OptSeq = None,
+        dashes: OptStr = None,
+        width: float = 1,
+        lineCap: int = 0,
+        lineJoin: int = 0,
+        morph: OptSeq = None,
+        overlay: bool = True,
+        stroke_opacity: float = 1,
+        fill_opacity: float = 1,
+        oc: int = 0,
 ) -> fitz.Point:
     """Draw a quadrilateral."""
     img = page.new_shape()
@@ -2204,20 +2225,20 @@ def draw_quad(
 
 
 def draw_polyline(
-    page: fitz.Page,
-    points: list,
-    color: OptSeq = (0,),
-    fill: OptSeq = None,
-    dashes: OptStr = None,
-    width: float = 1,
-    morph: OptSeq = None,
-    lineCap: int = 0,
-    lineJoin: int = 0,
-    overlay: bool = True,
-    closePath: bool = False,
-    stroke_opacity: float = 1,
-    fill_opacity: float = 1,
-    oc: int = 0,
+        page: fitz.Page,
+        points: list,
+        color: OptSeq = (0,),
+        fill: OptSeq = None,
+        dashes: OptStr = None,
+        width: float = 1,
+        morph: OptSeq = None,
+        lineCap: int = 0,
+        lineJoin: int = 0,
+        overlay: bool = True,
+        closePath: bool = False,
+        stroke_opacity: float = 1,
+        fill_opacity: float = 1,
+        oc: int = 0,
 ) -> fitz.Point:
     """Draw multiple connected line segments."""
     img = page.new_shape()
@@ -2241,20 +2262,20 @@ def draw_polyline(
 
 
 def draw_circle(
-    page: fitz.Page,
-    center: point_like,
-    radius: float,
-    color: OptSeq = (0,),
-    fill: OptSeq = None,
-    morph: OptSeq = None,
-    dashes: OptStr = None,
-    width: float = 1,
-    lineCap: int = 0,
-    lineJoin: int = 0,
-    overlay: bool = True,
-    stroke_opacity: float = 1,
-    fill_opacity: float = 1,
-    oc: int = 0,
+        page: fitz.Page,
+        center: point_like,
+        radius: float,
+        color: OptSeq = (0,),
+        fill: OptSeq = None,
+        morph: OptSeq = None,
+        dashes: OptStr = None,
+        width: float = 1,
+        lineCap: int = 0,
+        lineJoin: int = 0,
+        overlay: bool = True,
+        stroke_opacity: float = 1,
+        fill_opacity: float = 1,
+        oc: int = 0,
 ) -> fitz.Point:
     """Draw a circle given its center and radius."""
     img = page.new_shape()
@@ -2276,19 +2297,19 @@ def draw_circle(
 
 
 def draw_oval(
-    page: fitz.Page,
-    rect: typing.Union[rect_like, quad_like],
-    color: OptSeq = (0,),
-    fill: OptSeq = None,
-    dashes: OptStr = None,
-    morph: OptSeq = None,
-    width: float = 1,
-    lineCap: int = 0,
-    lineJoin: int = 0,
-    overlay: bool = True,
-    stroke_opacity: float = 1,
-    fill_opacity: float = 1,
-    oc: int = 0,
+        page: fitz.Page,
+        rect: typing.Union[rect_like, quad_like],
+        color: OptSeq = (0,),
+        fill: OptSeq = None,
+        dashes: OptStr = None,
+        morph: OptSeq = None,
+        width: float = 1,
+        lineCap: int = 0,
+        lineJoin: int = 0,
+        overlay: bool = True,
+        stroke_opacity: float = 1,
+        fill_opacity: float = 1,
+        oc: int = 0,
 ) -> fitz.Point:
     """Draw an oval given its containing rectangle or quad."""
     img = page.new_shape()
@@ -2311,22 +2332,22 @@ def draw_oval(
 
 
 def draw_curve(
-    page: fitz.Page,
-    p1: point_like,
-    p2: point_like,
-    p3: point_like,
-    color: OptSeq = (0,),
-    fill: OptSeq = None,
-    dashes: OptStr = None,
-    width: float = 1,
-    morph: OptSeq = None,
-    closePath: bool = False,
-    lineCap: int = 0,
-    lineJoin: int = 0,
-    overlay: bool = True,
-    stroke_opacity: float = 1,
-    fill_opacity: float = 1,
-    oc: int = 0,
+        page: fitz.Page,
+        p1: point_like,
+        p2: point_like,
+        p3: point_like,
+        color: OptSeq = (0,),
+        fill: OptSeq = None,
+        dashes: OptStr = None,
+        width: float = 1,
+        morph: OptSeq = None,
+        closePath: bool = False,
+        lineCap: int = 0,
+        lineJoin: int = 0,
+        overlay: bool = True,
+        stroke_opacity: float = 1,
+        fill_opacity: float = 1,
+        oc: int = 0,
 ) -> fitz.Point:
     """Draw a special Bezier curve from p1 to p3, generating control points on lines p1 to p2 and p2 to p3."""
     img = page.new_shape()
@@ -2350,23 +2371,23 @@ def draw_curve(
 
 
 def draw_bezier(
-    page: fitz.Page,
-    p1: point_like,
-    p2: point_like,
-    p3: point_like,
-    p4: point_like,
-    color: OptSeq = (0,),
-    fill: OptSeq = None,
-    dashes: OptStr = None,
-    width: float = 1,
-    morph: OptStr = None,
-    closePath: bool = False,
-    lineCap: int = 0,
-    lineJoin: int = 0,
-    overlay: bool = True,
-    stroke_opacity: float = 1,
-    fill_opacity: float = 1,
-    oc: int = 0,
+        page: fitz.Page,
+        p1: point_like,
+        p2: point_like,
+        p3: point_like,
+        p4: point_like,
+        color: OptSeq = (0,),
+        fill: OptSeq = None,
+        dashes: OptStr = None,
+        width: float = 1,
+        morph: OptStr = None,
+        closePath: bool = False,
+        lineCap: int = 0,
+        lineJoin: int = 0,
+        overlay: bool = True,
+        stroke_opacity: float = 1,
+        fill_opacity: float = 1,
+        oc: int = 0,
 ) -> fitz.Point:
     """Draw a general cubic Bezier curve from p1 to p4 using control points p2 and p3."""
     img = page.new_shape()
@@ -2390,23 +2411,23 @@ def draw_bezier(
 
 
 def draw_sector(
-    page: fitz.Page,
-    center: point_like,
-    point: point_like,
-    beta: float,
-    color: OptSeq = (0,),
-    fill: OptSeq = None,
-    dashes: OptStr = None,
-    fullSector: bool = True,
-    morph: OptSeq = None,
-    width: float = 1,
-    closePath: bool = False,
-    lineCap: int = 0,
-    lineJoin: int = 0,
-    overlay: bool = True,
-    stroke_opacity: float = 1,
-    fill_opacity: float = 1,
-    oc: int = 0,
+        page: fitz.Page,
+        center: point_like,
+        point: point_like,
+        beta: float,
+        color: OptSeq = (0,),
+        fill: OptSeq = None,
+        dashes: OptStr = None,
+        fullSector: bool = True,
+        morph: OptSeq = None,
+        width: float = 1,
+        closePath: bool = False,
+        lineCap: int = 0,
+        lineJoin: int = 0,
+        overlay: bool = True,
+        stroke_opacity: float = 1,
+        fill_opacity: float = 1,
+        oc: int = 0,
 ) -> fitz.Point:
     """Draw a circle sector given circle center, one arc end point and the angle of the arc.
 
@@ -3112,7 +3133,7 @@ def _get_font_properties(doc: fitz.Document, xref: int) -> tuple:
 
 
 def get_char_widths(
-    doc: fitz.Document, xref: int, limit: int = 256, idx: int = 0, fontdict: OptDict = None
+        doc: fitz.Document, xref: int, limit: int = 256, idx: int = 0, fontdict: OptDict = None
 ) -> list:
     """Get list of glyph information of a font.
 
@@ -3302,11 +3323,11 @@ class Shape:
         return self.lastPoint
 
     def draw_bezier(
-        self,
-        p1: point_like,
-        p2: point_like,
-        p3: point_like,
-        p4: point_like,
+            self,
+            p1: point_like,
+            p2: point_like,
+            p3: point_like,
+            p4: point_like,
     ) -> fitz.Point:
         """Draw a standard cubic Bezier curve."""
         p1 = fitz.Point(p1)
@@ -3358,10 +3379,10 @@ class Shape:
         return self.draw_sector(center, p1, 360, fullSector=False)
 
     def draw_curve(
-        self,
-        p1: point_like,
-        p2: point_like,
-        p3: point_like,
+            self,
+            p1: point_like,
+            p2: point_like,
+            p3: point_like,
     ) -> fitz.Point:
         """Draw a curve between points using one control point."""
         kappa = 0.55228474983
@@ -3373,11 +3394,11 @@ class Shape:
         return self.draw_bezier(p1, k1, k2, p3)
 
     def draw_sector(
-        self,
-        center: point_like,
-        point: point_like,
-        beta: float,
-        fullSector: bool = True,
+            self,
+            center: point_like,
+            point: point_like,
+            beta: float,
+            fullSector: bool = True,
     ) -> fitz.Point:
         """Draw a circle sector."""
         center = fitz.Point(center)
@@ -3503,10 +3524,10 @@ class Shape:
         return self.draw_polyline([q.ul, q.ll, q.lr, q.ur, q.ul])
 
     def draw_zigzag(
-        self,
-        p1: point_like,
-        p2: point_like,
-        breadth: float = 2,
+            self,
+            p1: point_like,
+            p2: point_like,
+            breadth: float = 2,
     ) -> fitz.Point:
         """Draw a zig-zagged line from p1 to p2."""
         p1 = fitz.Point(p1)
@@ -3532,10 +3553,10 @@ class Shape:
         return p2
 
     def draw_squiggle(
-        self,
-        p1: point_like,
-        p2: point_like,
-        breadth=2,
+            self,
+            p1: point_like,
+            p2: point_like,
+            breadth=2,
     ) -> fitz.Point:
         """Draw a squiggly line from p1 to p2."""
         p1 = fitz.Point(p1)
@@ -3572,24 +3593,24 @@ class Shape:
     # Shape.insert_text
     # ==============================================================================
     def insert_text(
-        self,
-        point: point_like,
-        buffer: typing.Union[str, list],
-        fontsize: float = 11,
-        lineheight: OptFloat = None,
-        fontname: str = "helv",
-        fontfile: OptStr = None,
-        set_simple: bool = 0,
-        encoding: int = 0,
-        color: OptSeq = None,
-        fill: OptSeq = None,
-        render_mode: int = 0,
-        border_width: float = 0.05,
-        rotate: int = 0,
-        morph: OptSeq = None,
-        stroke_opacity: float = 1,
-        fill_opacity: float = 1,
-        oc: int = 0,
+            self,
+            point: point_like,
+            buffer: typing.Union[str, list],
+            fontsize: float = 11,
+            lineheight: OptFloat = None,
+            fontname: str = "helv",
+            fontfile: OptStr = None,
+            set_simple: bool = 0,
+            encoding: int = 0,
+            color: OptSeq = None,
+            fill: OptSeq = None,
+            render_mode: int = 0,
+            border_width: float = 0.05,
+            rotate: int = 0,
+            morph: OptSeq = None,
+            stroke_opacity: float = 1,
+            fill_opacity: float = 1,
+            oc: int = 0,
     ) -> int:
 
         # ensure 'text' is a list of strings, worth dealing with
@@ -3682,27 +3703,27 @@ class Shape:
         top = height - point.y - self.y  # start of 1st char
         left = point.x + self.x  # start of 1. char
         space = top  # space available
-        #headroom = point.y + self.y  # distance to page border
+        # headroom = point.y + self.y  # distance to page border
         if rot == 90:
             left = height - point.y - self.y
             top = -point.x - self.x
             cm += cmp90
             space = width - abs(top)
-            #headroom = point.x + self.x
+            # headroom = point.x + self.x
 
         elif rot == 270:
             left = -height + point.y + self.y
             top = point.x + self.x
             cm += cmm90
             space = abs(top)
-            #headroom = width - point.x - self.x
+            # headroom = width - point.x - self.x
 
         elif rot == 180:
             left = -point.x - self.x
             top = -height + point.y + self.y
             cm += cm180
             space = abs(point.y + self.y)
-            #headroom = height - point.y - self.y
+            # headroom = height - point.y - self.y
 
         optcont = self.page._get_optional_content(oc)
         if optcont is not None:
@@ -3758,26 +3779,26 @@ class Shape:
     # Shape.insert_textbox
     # ==============================================================================
     def insert_textbox(
-        self,
-        rect: rect_like,
-        buffer: typing.Union[str, list],
-        fontname: OptStr = "helv",
-        fontfile: OptStr = None,
-        fontsize: float = 11,
-        lineheight: OptFloat = None,
-        set_simple: bool = 0,
-        encoding: int = 0,
-        color: OptSeq = None,
-        fill: OptSeq = None,
-        expandtabs: int = 1,
-        border_width: float = 0.05,
-        align: int = 0,
-        render_mode: int = 0,
-        rotate: int = 0,
-        morph: OptSeq = None,
-        stroke_opacity: float = 1,
-        fill_opacity: float = 1,
-        oc: int = 0,
+            self,
+            rect: rect_like,
+            buffer: typing.Union[str, list],
+            fontname: OptStr = "helv",
+            fontfile: OptStr = None,
+            fontsize: float = 11,
+            lineheight: OptFloat = None,
+            set_simple: bool = 0,
+            encoding: int = 0,
+            color: OptSeq = None,
+            fill: OptSeq = None,
+            expandtabs: int = 1,
+            border_width: float = 0.05,
+            align: int = 0,
+            render_mode: int = 0,
+            rotate: int = 0,
+            morph: OptSeq = None,
+            stroke_opacity: float = 1,
+            fill_opacity: float = 1,
+            oc: int = 0,
     ) -> float:
         """Insert text into a given rectangle.
 
@@ -3935,7 +3956,7 @@ class Shape:
             point = rect.br + c_pnt  # line 1 'lheight' above bottom
             maxwidth = rect.width  # pixels available in one line
             progr = -1  # subtract lheight for next line
-            maxheight =rect.height  # available text height
+            maxheight = rect.height  # available text height
             cm += cm180
 
         else:  # rotate clockwise (270 or -90)
@@ -4077,19 +4098,19 @@ class Shape:
         return more
 
     def finish(
-        self,
-        width: float = 1,
-        color: OptSeq = (0,),
-        fill: OptSeq = None,
-        lineCap: int = 0,
-        lineJoin: int = 0,
-        dashes: OptStr = None,
-        even_odd: bool = False,
-        morph: OptSeq = None,
-        closePath: bool = True,
-        fill_opacity: float = 1,
-        stroke_opacity: float = 1,
-        oc: int = 0,
+            self,
+            width: float = 1,
+            color: OptSeq = (0,),
+            fill: OptSeq = None,
+            lineCap: int = 0,
+            lineJoin: int = 0,
+            dashes: OptStr = None,
+            even_odd: bool = False,
+            morph: OptSeq = None,
+            closePath: bool = True,
+            fill_opacity: float = 1,
+            stroke_opacity: float = 1,
+            oc: int = 0,
     ) -> None:
         """Finish the current drawing segment.
 
@@ -4289,20 +4310,20 @@ def apply_redactions(page: fitz.Page, images: int = 2) -> bool:
 # Acrobat 'sanitize' function
 # ------------------------------------------------------------------------------
 def scrub(
-    doc: fitz.Document,
-    attached_files: bool = True,
-    clean_pages: bool = True,
-    embedded_files: bool = True,
-    hidden_text: bool = True,
-    javascript: bool = True,
-    metadata: bool = True,
-    redactions: bool = True,
-    redact_images: int = 0,
-    remove_links: bool = True,
-    reset_fields: bool = True,
-    reset_responses: bool = True,
-    thumbnails: bool = True,
-    xml_metadata: bool = True,
+        doc: fitz.Document,
+        attached_files: bool = True,
+        clean_pages: bool = True,
+        embedded_files: bool = True,
+        hidden_text: bool = True,
+        javascript: bool = True,
+        metadata: bool = True,
+        redactions: bool = True,
+        redact_images: int = 0,
+        remove_links: bool = True,
+        reset_fields: bool = True,
+        reset_responses: bool = True,
+        thumbnails: bool = True,
+        xml_metadata: bool = True,
 ) -> None:
     def remove_hidden(cont_lines):
         """Remove hidden text from a PDF page.
@@ -4441,10 +4462,10 @@ def scrub(
             doc.xref_set_key(xref, "Metadata", "null")
 
 
-def _show_fz_text( text):
-    #if mupdf_cppyy:
+def _show_fz_text(text):
+    # if mupdf_cppyy:
     #    assert isinstance( text, cppyy.gbl.mupdf.Text)
-    #else:
+    # else:
     #    assert isinstance( text, mupdf.Text)
     num_spans = 0
     num_chars = 0
@@ -4457,18 +4478,19 @@ def _show_fz_text( text):
         span = span.next
     return f'num_spans={num_spans} num_chars={num_chars}'
 
+
 def fill_textbox(
-    writer: fitz.TextWriter,
-    rect: rect_like,
-    text: typing.Union[str, list],
-    pos: point_like = None,
-    font: typing.Optional[fitz.Font] = None,
-    fontsize: float = 11,
-    lineheight: OptFloat = None,
-    align: int = 0,
-    warn: bool = None,
-    right_to_left: bool = False,
-    small_caps: bool = False,
+        writer: fitz.TextWriter,
+        rect: rect_like,
+        text: typing.Union[str, list],
+        pos: point_like = None,
+        font: typing.Optional[fitz.Font] = None,
+        fontsize: float = 11,
+        lineheight: OptFloat = None,
+        align: int = 0,
+        warn: bool = None,
+        right_to_left: bool = False,
+        small_caps: bool = False,
 ) -> tuple:
     """Fill a rectangle with text.
 
@@ -4502,10 +4524,10 @@ def fill_textbox(
 
     def append_this(pos, text):
         ret = writer.append(
-                pos, text, font=font, fontsize=fontsize, small_caps=small_caps
-                )
+            pos, text, font=font, fontsize=fontsize, small_caps=small_caps
+        )
         return ret
-        
+
     tolerance = fontsize * 0.2  # extra distance to left border
     space_len = textlen(" ")
     std_width = rect.width - tolerance
@@ -4727,11 +4749,11 @@ def set_oc(doc: fitz.Document, xref: int, oc: int) -> None:
 
 
 def set_ocmd(
-    doc: fitz.Document,
-    xref: int = 0,
-    ocgs: typing.Union[list, None] = None,
-    policy: OptStr = None,
-    ve: typing.Union[list, None] = None,
+        doc: fitz.Document,
+        xref: int = 0,
+        ocgs: typing.Union[list, None] = None,
+        policy: OptStr = None,
+        ve: typing.Union[list, None] = None,
 ) -> int:
     """Create or update an OCMD object in a PDF document.
 
@@ -4821,7 +4843,7 @@ def get_ocmd(doc: fitz.Document, xref: int) -> dict:
     if p0 < 0 or p1 < 0:  # no OCGs found
         ocgs = None
     else:
-        ocgs = text[p0 + 6 : p1].replace("0 R", " ").split()
+        ocgs = text[p0 + 6: p1].replace("0 R", " ").split()
         ocgs = list(map(int, ocgs))
 
     p0 = text.find("/P/")  # look for /P policy key
@@ -4834,7 +4856,7 @@ def get_ocmd(doc: fitz.Document, xref: int) -> dict:
         if p1 < 0:  # some irregular syntax
             raise ValueError("bad object at xref")
         else:
-            policy = text[p0 + 3 : p1 + 2]
+            policy = text[p0 + 3: p1 + 2]
 
     p0 = text.find("/VE[")  # look for /VE visibility expression key
     if p0 < 0:  # no visibility expression found
@@ -4851,7 +4873,7 @@ def get_ocmd(doc: fitz.Document, xref: int) -> dict:
             if text[p1] == "]":
                 rp += 1
         # p1 now positioned at the last "]"
-        ve = text[p0 + 3 : p1 + 1]  # the PDF /VE array
+        ve = text[p0 + 3: p1 + 1]  # the PDF /VE array
         ve = (
             ve.replace("/And", '"and",')
             .replace("/Not", '"not",')
@@ -5073,6 +5095,7 @@ def set_page_labels(doc, labels):
         {'startpage': int, 'prefix': str, 'style': str, 'firstpagenum': int},
         as returned by get_page_labels().
     """
+
     # William Chapman, 2021-01-06
 
     def create_label_str(label):
@@ -5377,7 +5400,7 @@ def subset_fonts(doc: fitz.Document, verbose: bool = False) -> None:
         else:
             doc.xref_set_key(df_xref, "W", widths)
         if (type(dwidths) is not str or not dwidths) and doc.xref_get_key(
-            df_xref, "DW"
+                df_xref, "DW"
         )[0] != "null":
             doc.xref_set_key(df_xref, "DW", "null")
         else:
@@ -5504,8 +5527,8 @@ def subset_fonts(doc: fitz.Document, verbose: bool = False) -> None:
             """
             while "#" in name:
                 p = name.find("#")
-                c = int(name[p + 1 : p + 3], 16)
-                name = name.replace(name[p : p + 3], chr(c))
+                c = int(name[p + 1: p + 3], 16)
+                name = name.replace(name[p: p + 3], chr(c))
             return name
 
         def get_fontnames(doc, item):
@@ -5530,7 +5553,7 @@ def subset_fonts(doc: fitz.Document, verbose: bool = False) -> None:
             if p1 >= 0:
                 p2 = descendents.find("/", p1 + 1)
                 p1 = min(descendents.find("/", p2 + 1), descendents.find(">>", p2 + 1))
-                fontname = descendents[p2 + 1 : p1]
+                fontname = descendents[p2 + 1: p1]
                 fontname = norm_name(fontname)
                 if fontname not in names:
                     names.append(fontname)
@@ -5543,10 +5566,10 @@ def subset_fonts(doc: fitz.Document, verbose: bool = False) -> None:
                 basename = f[3]  # font basename
 
                 if font_ext not in (  # skip if not supported by fontTools
-                    "otf",
-                    "ttf",
-                    "woff",
-                    "woff2",
+                        "otf",
+                        "ttf",
+                        "woff",
+                        "woff2",
                 ):
                     continue
                 # skip fonts which already are subsets
