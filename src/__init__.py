@@ -14487,7 +14487,7 @@ def JM_annot_set_border( border, doc, annot_obj):
         ndashes = oborder.get( dictkey_dashes)  # no new dashes: keep old
     if nstyle is None:
         nstyle  = oborder.get( dictkey_style)   # no new style: keep old
-    if nclouds < 0:
+    if nclouds is None: #changed from nclouds < 1 that caused error when None WWC
         nclouds  = oborder.get( "clouds")       # no new clouds: keep old
 
     if isinstance( ndashes, tuple) and len( ndashes) > 0:
