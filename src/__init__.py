@@ -13345,6 +13345,7 @@ LINK_URI = 2
 LINK_LAUNCH = 3
 LINK_NAMED = 4
 LINK_GOTOR = 5
+LINK_NAMED_R = 6 #added WWC for named destinations on other files
 LINK_FLAG_L_VALID = 1
 LINK_FLAG_T_VALID = 2
 LINK_FLAG_R_VALID = 4
@@ -13507,6 +13508,7 @@ annot_skel = { #gotor3 and gotor4 added by WWC to allow NewWindow and Fit
         "launch": "<</A<</S/Launch/F<</F(%s)/UF(%s)/Type/Filespec>>>>/Rect[%s]/BS<</W 0>>/Subtype/Link>>",
         "uri": "<</A<</S/URI/URI(%s)>>/Rect[%s]/BS<</W 0>>/Subtype/Link>>",
         "named": "<</A<</S/GoTo/D(%s)/Type/Action>>/Rect[%s]/BS<</W 0>>/Subtype/Link>>",
+        "named_r": "<</A<</NewWindow %s/S/GoToR/D(%s)/F<</F(%s)/UF(%s)/Type/Filespec>>/Type/Action>>/Rect[%s]/BS<</W 0>>/Subtype/Link>>", #added WWC for named destination other file
         }
 
 class FileDataError(RuntimeError):

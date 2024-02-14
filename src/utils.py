@@ -1687,6 +1687,12 @@ def getLinkText(page: fitz.Page, lnk: dict) -> str:
         if lname is None:  # if missing, fall back to alternative
             lname = lnk["nameddest"]
         annot = txt % (lname, rect)
+    elif lnk["kind"] == fitz.LINK_NAMED_R:  # added WWC for named destinations in other file
+        txt = fitz.annot_skel["named_r"]
+        lname = lnk.get("name")  # check presence of key
+        if lname is None:  # if missing, fall back to alternative
+            lname = lnk["nameddest"]
+        annot = txt % (NW, lname, lnk['file'], lnk['file'], rect)
     if not annot:
         return annot
 
